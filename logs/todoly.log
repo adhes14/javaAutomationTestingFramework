@@ -1,2 +1,0 @@
-2022-08-10 20:46:19.223 INFO [Test worker] [utils.LoggerManager.logMessage(LoggerManager.java:34)] - Reading properties file
-2022-08-10 20:46:19.249 INFO [Test worker] [utils.LoggerManager.logMessage(LoggerManager.java:34)] - Initializing API manager
