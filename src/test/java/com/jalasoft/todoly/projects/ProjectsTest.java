@@ -27,6 +27,7 @@ public class ProjectsTest {
 
         Assert.assertEquals(response.statusCode(), 200, "Correct status code is not returned");
         Assert.assertTrue(response.statusLine().contains("200 OK"), "Correct status code and message is not returned");
+        //Next assertions should be compared with a json file in resources package
         Assert.assertFalse(response.body().asString().contains("ErrorMessage"), "Correct response body is returned");
         Assert.assertFalse(response.body().asString().contains("ErrorCode"), "Correct response body is not returned");
     }

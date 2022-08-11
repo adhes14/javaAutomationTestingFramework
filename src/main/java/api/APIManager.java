@@ -36,6 +36,7 @@ public class APIManager {
 
     public Response get(String endpoint) {
         return RestAssured
+//This is commented because there are problems with negative tests with credentials
 //                .given()
 //                    .auth()
 //                    .preemptive()
