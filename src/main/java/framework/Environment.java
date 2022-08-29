@@ -54,4 +54,16 @@ public class Environment {
     public String getProjectsEndpoint() {
         return getEnvironmentSetting("projectsEndpoint");
     }
+
+    public String getProjectByIdEndpoint() {
+        return getEnvironmentSetting("projectByIdEndpoint");
+    }
+
+    public String getInvalidUserName() {
+        return getEnvironmentSetting("invalidUserName");
+    }
+
+    public String getInvalidPassword() {
+        return getEnvironmentSetting("invalidPassword");
+    }
 }
