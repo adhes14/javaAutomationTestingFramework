@@ -40,4 +40,12 @@ public class ProjectUnauthorizedTests {
         Assert.assertEquals(response.jsonPath().getString("ErrorMessage"), "Not Authenticated", "Incorrect content value was set");
         Assert.assertEquals(response.jsonPath().getString("ErrorCode"), "102", "Incorrect icon value was set");
     }
+
+//    @Test
+//    public void test() {
+//        This test is only for testing porpuoses
+//        It get a system property which has been defined at build.gradle
+//        tu run it: ./gradlew clean :test --tests "com.jalasoft.todoly.projects.ProjectUnauthorizedTests.test" -PenvId=Hello
+//        System.out.println(System.getProperty("envId"));
+//    }
 }

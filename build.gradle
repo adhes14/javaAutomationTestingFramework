@@ -24,4 +24,12 @@ test {
     testLogging.showCauses = true
     testLogging.showStackTraces = true
     testLogging.showStandardStreams = true
+
+//    It's a way to read a property from other file, also a class could read properties using Properties class
+//    build.gradle only knows gradle.properties
+//    System.setProperty("baseURL", baseURL)
+//    println System.getProperty("baseURL")
+
+//    It sets a variable on JVM, for example the environment we are going to use, to run it:
+    systemProperty "envId", envId
 }
