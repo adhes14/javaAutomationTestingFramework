@@ -23,7 +23,7 @@ import java.util.Objects;
 public class ProjectsTest {
     private static final Environment environment = Environment.getInstance();
     private static final APIManager apiManager = APIManager.getInstance();
-    private ArrayList<Integer> projectIds = new ArrayList<>();
+    private final ArrayList<Integer> projectIds = new ArrayList<>();
 
     @BeforeClass
     public void setup() {
