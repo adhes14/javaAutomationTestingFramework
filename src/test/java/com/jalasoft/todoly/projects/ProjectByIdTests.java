@@ -5,12 +5,14 @@ import api.methods.APIProjectMethods;
 import entities.Project;
 import framework.Environment;
 import io.restassured.http.ContentType;
+import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -63,6 +65,22 @@ public class ProjectByIdTests {
         Assert.assertNull(response.jsonPath().getString("ErrorMessage"), "Error message was returned");
         Assert.assertNull(response.jsonPath().getString("ErrorCode"), "Error code was returned");
         Assert.assertEquals(responseProject.getIcon(), jsonAsMap.get("Icon"), "Incorrect Icon value was set");
+    }
+
+    @Test
+    public void updateProjectByIdWithJSONFile() {
+        Project project = projects.get(0);
+        String projectByIdEndpoint = String.format(environment.getProjectByIdEndpoint(), project.getId());
+        File requestBody = new File("src/test/resources/json/projects/UpdateProject.json");
+
+        Response response = apiManager.put(projectByIdEndpoint, ContentType.JSON, JsonPath.from(requestBody).get());
+        Project responseProject = response.as(Project.class);
+
+        Assert.assertEquals(response.getStatusCode(), 200, "Correct status code is not returned");
+        Assert.assertTrue(response.getStatusLine().contains("200 OK"), "Correct status code and message is not returned");
+        Assert.assertNull(response.jsonPath().getString("ErrorMessage"), "Error Message was returned");
+        Assert.assertNull(response.jsonPath().getString("ErrorCode"), "Error Code was returned");
+        Assert.assertEquals(responseProject.getIcon(), JsonPath.from(requestBody).getInt("Icon"), "Incorrect Icon value was set");
     }
 
     @Test
