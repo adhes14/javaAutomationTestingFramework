@@ -6,6 +6,7 @@ import entities.NewProject;
 import entities.Project;
 import framework.Environment;
 import io.restassured.http.ContentType;
+import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.Reporter;
@@ -13,10 +14,14 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Objects;
+
 public class ProjectsTest {
     private static final Environment environment = Environment.getInstance();
     private static final APIManager apiManager = APIManager.getInstance();
-    private int projectId;
+    private ArrayList<Integer> projectIds = new ArrayList<>();
 
     @BeforeClass
     public void setup() {
@@ -41,7 +46,7 @@ public class ProjectsTest {
         NewProject newProject = new NewProject("My testing project", 2);
         Response response = apiManager.post(environment.getProjectsEndpoint(), ContentType.JSON, newProject);
         Project responseProject = response.as(Project.class);
-        projectId = responseProject.getId();
+        projectIds.add(responseProject.getId());
 
         Assert.assertEquals(response.getStatusCode(), 200, "Correct status code is not returned");
         Assert.assertTrue(response.getStatusLine().contains("200 OK"), "Correct status code and message is not returned");
@@ -49,6 +54,21 @@ public class ProjectsTest {
         Assert.assertNull(response.jsonPath().getString("ErrorCode"), "Error code was returned");
         Assert.assertEquals(responseProject.getContent(), newProject.getContent(), "Incorrect content value was set");
         Assert.assertEquals(responseProject.getIcon(), newProject.getIcon(), "Incorrect icon value was set");
+    }
+
+    @Test
+    public void createNewProjectWithJSONFile() {
+        File requestBody = new File("src/test/resources/json/projects/NewProject.json");
+        Response response = apiManager.post(environment.getProjectsEndpoint(), ContentType.JSON, JsonPath.from(requestBody).get());
+        Project responseProject = response.as(Project.class);
+        projectIds.add(responseProject.getId());
+
+        Assert.assertEquals(response.getStatusCode(), 200, "Correct status code is not returned");
+        Assert.assertTrue(response.getStatusLine().contains("200 OK"), "Correct status code and message is not returned");
+        Assert.assertNull(response.jsonPath().getString("ErrorMessage"), "Error Message was returned");
+        Assert.assertNull(response.jsonPath().getString("ErrorCode"), "Error Code was returned");
+        Assert.assertEquals(responseProject.getContent(), JsonPath.from(requestBody).getString("Content"), "Incorrect Content value was set");
+        Assert.assertEquals(responseProject.getIcon(), JsonPath.from(requestBody).getInt("Icon"), "Incorrect Icon value was set");
     }
 
     @Test
@@ -65,10 +85,13 @@ public class ProjectsTest {
     }
 
     @AfterClass
-    public void  teardown() {
-        if (projectId != 0) {
-            boolean isProjectDeleted = APIProjectMethods.deleteProject(projectId);
-            Assert.assertTrue(isProjectDeleted, "Project was not deleted");
+    public void teardown() {
+        projectIds.removeIf(Objects::isNull);
+        if (projectIds.size() > 0) {
+            for (int projectId : projectIds) {
+                boolean isProjectDeleted = APIProjectMethods.deleteProject(projectId);
+                Assert.assertTrue(isProjectDeleted, "Project was not deleted");
+            }
         }
     }
 }
