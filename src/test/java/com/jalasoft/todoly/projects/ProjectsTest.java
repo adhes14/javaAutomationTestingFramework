@@ -104,6 +104,24 @@ public class ProjectsTest {
         Assert.assertEquals(response.jsonPath().getString("ErrorCode"), "305", "Incorrect icon value was set");
     }
 
+    @Test
+    public void contentLowerCaseBug() {
+        Map<String, Object> jsonAsMap = new HashMap<>();
+        jsonAsMap.put("content", "My Testing Project");
+        jsonAsMap.put("Icon", 3);
+
+        Response response = apiManager.post(environment.getProjectsEndpoint(), ContentType.JSON, jsonAsMap);
+        Project responseProject = response.as(Project.class);
+        projectIds.add(responseProject.getId());
+
+        Assert.assertEquals(response.getStatusCode(), 200, "Correct status code is not returned");
+        Assert.assertTrue(response.getStatusLine().contains("200 OK"), "Correct status code and message is not returned");
+        Assert.assertNull(response.jsonPath().getString("ErrorMessage"), "Error Message was returned");
+        Assert.assertNull(response.jsonPath().getString("ErrorCode"), "Error Code was returned");
+        Assert.assertEquals(responseProject.getContent(), jsonAsMap.get("Content"), "Incorrect Content value was set");
+        Assert.assertEquals(responseProject.getIcon(), jsonAsMap.get("Icon"), "Incorrect Icon value was set");
+    }
+
     @AfterClass
     public void teardown() {
         projectIds.removeIf(Objects::isNull);
