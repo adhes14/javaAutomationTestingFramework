@@ -32,6 +32,6 @@ test {
 
 //    It sets a variable on JVM, for example the environment we are going to use, to run it:
 //    to call it -PenvId=<value> is needed at the end of the command
-    systemProperty "envId", envId
-//    systemProperty "envId", "QA01"
+//    systemProperty "envId", envId
+    systemProperty "envId", "QA01"
 }
