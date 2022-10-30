@@ -2,11 +2,11 @@
   "Users": {
     "validUser": {
       "userName": "adhemar.duran@fundacion-jala.org",
-      "password": "todoly1"
+      "password": ""
     },
     "invalidUser": {
       "userName": "test@test.com",
-      "password": "test123"
+      "password": ""
     }
   }
 }
